@@ -3,18 +3,20 @@ package com.codecool.networking.data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Message implements Serializable {
+public class Message implements Serializable, TransferObject {
     private String content;
     private String author;
     private String receiver;
     private LocalDateTime createdAt;
 
-    public Message(String content, String author) {
-        this.content = content;
-        this.author = author;
+    private Message(MessageBuilder messageBuilder) {
+        this.content = messageBuilder.content;
+        this.author = messageBuilder.author;
+        this.receiver = messageBuilder.receiver;
         this.createdAt = LocalDateTime.now();
     }
 
+    @Override
     public String getContent() {
         return content;
     }
@@ -36,5 +38,25 @@ public class Message implements Serializable {
                 ", author='" + author + '\'' +
                 ", createdAt=" + createdAt +
                 '}';
+    }
+
+    public static class MessageBuilder{
+        private String content;
+        private String author = "SERVER";
+        private String receiver;
+
+        public MessageBuilder(String content, String receiver){
+            this.content = content;
+            this.receiver = receiver;
+        }
+
+        public MessageBuilder setAuthor(String author) {
+            this.author = author;
+            return this;
+        }
+
+        public Message build(){
+            return new Message(this);
+        }
     }
 }
