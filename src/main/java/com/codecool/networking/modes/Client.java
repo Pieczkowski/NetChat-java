@@ -2,21 +2,22 @@ package com.codecool.networking.modes;
 
 import com.codecool.networking.tasks.client.ClientFlowController;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 
 public class Client {
-    private String hostName;
+    private InetAddress ip;
     private int port;
 
-    public Client(int port, String hostName){
+    public Client(int port, InetAddress ip){
         this.port = port;
-        this.hostName = hostName;
+        this.ip = ip;
     }
 
     public void start() {
         System.out.println("Launching Client");
 
-        try(Socket socket = new Socket(hostName, port)){
+        try(Socket socket = new Socket(ip, port)){
             new ClientFlowController(socket);
             System.out.println("Client Launched");
             while (true){}
